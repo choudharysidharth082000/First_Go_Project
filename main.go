@@ -44,7 +44,7 @@ func main(){
 	r.HandleFunc("/", serveHome).Methods("GET");
 	r.HandleFunc("/getAllCourses", getAllCourses).Methods("GET");
 	r.HandleFunc("/getAllCourses/{id}", getOneCourse).Methods("GET");
-	r.HandleFunc("/deleteCourse/{id", deleteCourse).Methods("DELETE");
+	r.HandleFunc("/deleteCourse/{id}", deleteCourse).Methods("DELETE");
 	r.HandleFunc("/postCourse", createCourse).Methods("POST");
 
 
@@ -60,7 +60,12 @@ func serveHome(w http.ResponseWriter, r *http.Request){
 //getting all the courses
 func getAllCourses(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(database)
+	if len(database) == 0{
+		fmt.Println("Database is Empty");
+		json.NewEncoder(w).Encode("Database is Empty");
+		return;
+	}
+	json.NewEncoder(w).Encode(database);
 }
 //getting the sinfle course
 func getOneCourse(w http.ResponseWriter, r *http.Request){
@@ -111,6 +116,4 @@ func deleteCourse(w http.ResponseWriter, r *http.Request){
 			break;
 		}
 	}
-	//sending the response
-	json.NewEncoder(w).Encode("File Deletion Sucecss");
 }
